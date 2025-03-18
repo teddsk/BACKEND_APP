@@ -16,40 +16,56 @@
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .table {
+        .table-responsive {
             margin-top: 20px;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container text-center">
+
+    <div class="container-fluid text-center">
         <h1 class="mt-4">‼️ API Endpoints</h1>
         <p class="text-muted">Utilisez ces endpoints pour tester l'API dans votre application Flutter.</p>
         
         <div class="card p-4">
-            <table class="table table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Nom</th>
-                        <th>URL</th>
-                        <th>Méthode</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for endpoint in endpoints %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="table-dark">
                         <tr>
-                            <td>{{ endpoint.name }}</td>
-                            <td><a href="{{ endpoint.url }}" class="text-primary">{{ endpoint.url }}</a></td>
-                            <td><span class="badge bg-info">{{ endpoint.method }}</span></td>
+                            <th>Nom</th>
+                            <th>URL</th>
+                            <th>Méthode</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for endpoint in endpoints %}
+                            <tr>
+                                <td>{{ endpoint.name }}</td>
+                                <td><a href="{{ endpoint.url }}" class="text-primary">{{ endpoint.url }}</a></td>
+                                <td><span class="badge bg-info">{{ endpoint.method }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <footer class="mt-4">
+        <footer>
             <p class="text-muted">Made by Ted DSK 👨🏻‍💻</p>
         </footer>
     </div>
+
 </body>
 </html>
