@@ -6,6 +6,6 @@ urlpatterns = [
     path('api/signup/', signup, name='api_signup'),
     path('api/login/', login_user, name='api_login'),
     path('api/logout/', logout_user, name='api_logout'),
-    path('api/user/update/', update_user_details, name='api_user_update'),
+    path('api/user/update/<int:user_id>/', update_user_details, name='api_user_update'),
     path('api/utilisateurs/', list_utilisateurs, name='list_utilisateurs'),
 ]

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%#!8v@2galfzya#=*v!c0z10w&9#75i2@^!l2av+5lq3zr8!i*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['teddsk.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['teddsk.pythonanywhere.com', '127.0.0.1', 'www.teddsk.pythonanywhere.com']
 
 AUTH_USER_MODEL = 'authentification_app.Utilisateur'
 
