@@ -5,7 +5,8 @@ from .models import Utilisateur
 class UtilisateurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Utilisateur
-        fields = ['username', 'email', 'first_name', 'last_name', 'birth_date', 'password']
+        fields = ['email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
@@ -17,10 +18,11 @@ class UtilisateurUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Utilisateur
-        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        fields = ['email', 'password']
+        read_only_fields = ['email']
 
     def update(self, instance, validated_data):
-        password = validated_data.get('password', None)
-        if password:
-            instance.set_password(password)
+        if 'password' in validated_data:
+            instance.set_password(validated_data.pop('password'))
         return super().update(instance, validated_data)
+    

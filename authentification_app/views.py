@@ -6,9 +6,10 @@ from .serializers import UtilisateurSerializer, UtilisateurUpdateSerializer
 from .models import Utilisateur
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
-from django.urls import reverse
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def homepage(request):
     endpoints = {
         "Inscription": "http://127.0.0.1:8000/api/signup/",
@@ -20,12 +21,14 @@ def homepage(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def list_utilisateurs(request):
     utilisateurs = Utilisateur.objects.all()
     serializer = UtilisateurSerializer(utilisateurs, many=True)
     return Response(serializer.data)
 
 @api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 def signup(request):
     if request.method == 'GET':
         return Response({"message": "Veuillez envoyer une requête POST pour vous inscrire"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -38,21 +41,29 @@ def signup(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 def login_user(request):
     if request.method == 'GET':
         return Response({"message": "Veuillez envoyer une requête POST pour vous inscrire"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
-    if request.method == 'POST':
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return Response({'message': 'User logged in successfully'})
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    if not email or not password:
+        return Response({'error': 'Veuillez fournir un email ou un mot de passe correcte'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user = authenticate(request, username=email, password=password)
+
+    if user is not None:
+        login(request, user)
+        return Response({'message': 'Connexion réussie'}, status=status.HTTP_200_OK)
+    
+    return Response({'error': 'Identifiants invalides'}, status=status.HTTP_400_BAD_REQUEST)
+
     
 
 @api_view(['PUT', 'PATCH'])
+@permission_classes([AllowAny])
 def update_user_details(request, user_id):
     try:
         user = Utilisateur.objects.get(id=user_id)
@@ -63,10 +74,10 @@ def update_user_details(request, user_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Utilisateur.DoesNotExist:
         return Response({'error': 'Utilisateur non trouvé'}, status=status.HTTP_404_NOT_FOUND)
-
     
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def logout_user(request):
     logout(request)
     return Response({'message': 'User logged out successfully'})
